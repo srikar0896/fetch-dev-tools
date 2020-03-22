@@ -1,16 +1,40 @@
 import { LitElement, html, css } from 'lit-element';
-
+import { resolveRequest, rejectRequest } from "../requestService";
 
 class RequestItem extends LitElement {
   constructor(){
     super();
-    console.log(this.request);
   }
 
   static get properties() {
     return {
       request: { attribute: true, reflect: true, type: Object }
     }
+  }
+
+  handleResolve(){
+    resolveRequest({id:this.request.id});
+  }
+
+  render(){
+    return html`
+      <div class="devtools__request_item">
+        <div class="devtools__request_item__actions_wrapper">
+          <button class="devtools__request_item__action resolve" @click="${this.handleResolve}">
+            ✓
+          </button>
+          <button class="devtools__request_item__action reject" @click="${this.handleResolve}">
+            ×
+          </button>
+        </div>
+        <div class="devtools__request_item__name__wrapper">
+          <code class="devtools__request_item__name">${this.request.options.url}</code>
+        </div>
+        <button class="devtools__request_item__action settings" @click="${this.handleResolve}">
+          ⚙
+        </button>
+      </div>
+    `;
   }
 
   static get styles(){
@@ -68,37 +92,6 @@ class RequestItem extends LitElement {
         margin: 0;
       }
     `
-  }
-
-  handleResolve(e){
-    let myEvent = new CustomEvent('request-resolve', {
-      detail: {
-        request_id: this.request.id,
-      },
-      bubbles: true, 
-      composed: true });
-    this.dispatchEvent(myEvent);
-  }
-
-  render(){
-    return html`
-      <div class="devtools__request_item">
-        <div class="devtools__request_item__actions_wrapper">
-          <button class="devtools__request_item__action resolve" @click="${this.handleResolve}">
-            ✓
-          </button>
-          <button class="devtools__request_item__action reject" @click="${this.handleResolve}">
-            ×
-          </button>
-        </div>
-        <div class="devtools__request_item__name__wrapper">
-          <code class="devtools__request_item__name">${this.request.name}</code>
-        </div>
-        <button class="devtools__request_item__action settings" @click="${this.handleResolve}">
-          ⚙
-        </button>
-      </div>
-    `;
   }
 }
 
