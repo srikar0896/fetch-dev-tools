@@ -31,16 +31,22 @@ class OneDialog extends HTMLElement {
     <div class="wrapper">
       <div class="overlay"></div>
       <div class="dialog" role="dialog" aria-labelledby="title" aria-describedby="content">
-        <button class="close" aria-label="Close">✖️</button>
+        <div class="section">
+          <button tabindex="0" class="close action-button round danger close" aria-label="Close">✖️</button>
+        </div>
         <fdt-templates requestId="${this.getAttribute('requestId')}"></fdt-templates>
-        <h4 id="title">Custom Respose</h4>
-        <div id="content" class="content">
-          <div class="code-actions">
-            <button class="fdt-save-response-btn">save response</button>
-            <button class="fdt-save-as-template-btn">save as template</button>
-          </div>
-          <wc-codemirror mode="javascript" theme="monokai" value="function(){console.log("Hello")}"></wc-codemirror>
-          <div class="fdt-editor-container" style="height:100%">
+        <div class="section">
+          <div class="header">
+          <h3>Response Editor</h3>
+        </div>
+          <div id="content" class="content">
+            <div class="code-actions">
+              <button class="fdt-save-response-btn action-button">save response</button>
+              <button class="fdt-save-as-template-btn action-button">save as template</button>
+            </div>
+            <wc-codemirror mode="javascript" theme="monokai" value="function(){console.log("Hello")}"></wc-codemirror>
+            <div class="fdt-editor-container" style="height:100%">
+            </div>
           </div>
         </div>
       </div>
@@ -50,6 +56,29 @@ class OneDialog extends HTMLElement {
 
   getStyles() {
     return `
+    .section {
+      padding: 12px 20px;
+    }
+    .header {
+      margin-bottom: 12px;
+    }
+    h3 {
+      font-family: 'Merriweather Sans', sans-serif;
+      font-size: 18px;
+      color: rgba(22, 47, 86, 0.87);
+      padding-bottom: 8px;
+      margin: 0;
+    }
+    .title-border {
+      height: 5px;
+      width: 45px;
+      background: #2CCA74;
+      border-radius: 4px;
+    }
+    .code-actions {
+      margin-bottom: 12px;
+    }
+
     .wrapper {
       opacity: 0;
       transition: visibility 0s, opacity 0.25s ease-in;
@@ -88,11 +117,42 @@ class OneDialog extends HTMLElement {
       width: 400px;
       background: #ffffff;
       max-width: 600px;
-      padding: 1rem;
       overflow: auto;
     }
-    button:focus {
-      border: 2px solid blue;
+    .action-button {
+      padding: 8px 16px;
+      background: rgba(11, 112, 231, 0.15);
+      color: #0B70E7;
+      text-align: center;
+      letter-spacing: 1px;
+      border: none;
+      font-size: 12px;
+      margin-bottom: 8px;
+      margin-right: 12px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .action-button:hover,
+    .action-button:focus {
+      background: rgba(11, 112, 231, 0.35);
+      outline: none;
+    }
+    .round {
+      border-radius: 50% !important;
+    }
+    .danger {
+      background: #eb57578f !important;
+    }
+    .close{
+      padding-left: 7px;
+      padding-right: 3px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      float: right;
+    }
+    .close:hover,
+    .close:focus {
+      background: orange;
     }
     `;
   }

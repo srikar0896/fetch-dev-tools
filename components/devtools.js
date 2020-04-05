@@ -8,6 +8,7 @@ class FetchDevTools extends LitElement {
   constructor(){
     super();
     this.requests = [];
+
     fetch(`get/basic_info`, {
       method: 'GET'
     });
