@@ -81,7 +81,7 @@ class RequestItem extends LitElement {
         <div class="devtools__request_item__name__wrapper">
           <code class="devtools__request_item__name">${this.request.options.url}</code>
         </div>
-        <button class="devtools__request_item__action settings" @click="${this.handleToggle}">
+        <button class="devtools__request_item__action settings ${this.isExpanded ? "expanded" : ""}" @click="${this.handleToggle}">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="24 / arrows / circle-chevron-bottom">
               <path id="icon" fill-rule="evenodd" clip-rule="evenodd" d="M12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23ZM12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM16.7071 10.7071L15.2929 9.29289L12 12.5858L8.70711 9.29289L7.29289 10.7071L12 15.4142L16.7071 10.7071Z" fill="#FE940C"/>
@@ -277,6 +277,11 @@ class RequestItem extends LitElement {
       .updated-badge {
         color: #27AE60;
         margin-left: 6px;
+      }
+
+      .expanded {
+        transform: rotate(180deg);
+        transition: transform .2s ease-in-out;
       }
     `
   }
