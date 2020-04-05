@@ -71,6 +71,10 @@ class FetchDevTools extends LitElement {
         cursor: grab;
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2r9//38gYGAEESAAEGAAasgJOgzOKCoAAAAASUVORK5CYII=);
       }
+      .devtools-text-input {
+        border: 1px solid #f2f2f2;
+        border-radius: 3px;
+      }
     `
   }
 }
