@@ -11,9 +11,9 @@ class FetchDevTools extends LitElement {
 
     fetch(`get/basic_info`, {
       method: 'GET'
-    });
+    }).then(console.log);
 
-    fetch(`get/promoter_info`);
+    fetch(`get/promoter_info`).then(console.log);
 
     this.subscription = requestsService.subscriber.subscribe(
       debuggingRequests => {

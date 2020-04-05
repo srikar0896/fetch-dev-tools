@@ -12,6 +12,8 @@ class RequestItem extends LitElement {
     this.handleSaveResponse = this.handleSaveResponse.bind(this);
     this.handleCloseEditor = this.handleCloseEditor.bind(this);
     this.customResponseCode = "";
+    this.status_code = "301";
+    this.error_message = "not auth!";
     eventBus.register('fdt-save-response', this.handleSaveResponse);
     eventBus.register('fdt-close-editor', this.handleCloseEditor);
   }
@@ -37,11 +39,11 @@ class RequestItem extends LitElement {
   }
 
   handleResolve(){
-    resolveRequest({id:this.request.id});
+    resolveRequest({id:this.request.id, status_code: this.status_code, response: this.customResponseCode || "" });
   }
 
   handleReject(){
-    rejectRequest({id:this.request.id});
+    rejectRequest({ id:this.request.id, status_code: this.status_code, error_message: this.error_message });
   }
   
   handleToggle() {
@@ -66,7 +68,6 @@ class RequestItem extends LitElement {
   }
 
   render(){
-    console.log(this.customResponseCode);
     return html`
     <div class="devtools__request_item__wrapper">
       <div class="devtools__request_item">
@@ -116,13 +117,13 @@ class RequestItem extends LitElement {
                 <span>
                   Status code
                 </span>
-                <input type="text" autofocus size="3" class="devtools-text-input status-code"/>
+                <input .value="${this.status_code}" type="text" autofocus size="3" class="devtools-text-input status-code"/>
               </div>
               <div class="section">
                 <span>
                   Error message
                 </span>
-                <textarea rows="3" cols="25" class="devtools-text-input"></textarea>
+                <textarea .value="${this.error_message}" rows="3" cols="25" class="devtools-text-input"></textarea>
               </div>
             </div>
           `

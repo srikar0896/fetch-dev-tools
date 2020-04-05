@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+usimport { BehaviorSubject } from "rxjs";
 import uuid from "uuid";
 
 let requests = [];
@@ -20,10 +20,10 @@ const registerRequest = requestOptions => {
 
   const requestPromise = new Promise((resolve, reject) => {
     requestResolver.subscribe(resolvedRequest => {
-      const { requestId: resolvedRequestId, customResponse } = resolvedRequest;
+      const { id: resolvedRequestId, response, status_code } = resolvedRequest;
 
       if (resolvedRequestId === requestId) {
-        resolve(customResponse);
+        resolve({ data: response, status: status_code });
         // if (customResponse) {
         //   resolve(JSON.parse(customResponse));
         // } else {
@@ -34,10 +34,10 @@ const registerRequest = requestOptions => {
     });
 
     requestRejector.subscribe(rejectRequest => {
-      const { requestId: rejectRequestId, customError } = rejectRequest;
+      const { id: rejectRequestId, status_code, error_message } = rejectRequest;
       if (rejectRequestId === requestId) {
         // reject(requestOptions.error);
-        reject(customError);
+        reject({ status: status_code, errorMessage: error_message });
         removeFromProcessingList(rejectRequestId);
       }
     });
