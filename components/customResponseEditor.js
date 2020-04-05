@@ -6,18 +6,20 @@ import { getTemplate, saveAsTemplate } from '../templatesService';
 
 class OneDialog extends HTMLElement {
   static get observedAttributes() {
-    return ['open'];
+    return ['open', 'isSaveFormOpen'];
   }
   
   constructor() {
     super();
     this.handleTemplateChange = this.handleTemplateChange.bind(this);
     this.saveResponse = this.saveResponse.bind(this);
+    this.toggleSaveTemplateForm = this.toggleSaveTemplateForm.bind(this);
     this.saveTemplate = this.saveTemplate.bind(this);
     this.setCode = this.setCode.bind(this);
     this.attachShadow({ mode: 'open' });
     this.close = this.close.bind(this);
     eventBus.register('fdt-use-template', this.handleTemplateChange);
+    this.isSaveFormOpen = false;
   }
   
   attributeChangedCallback(attrName, oldValue, newValue) {
@@ -44,6 +46,10 @@ class OneDialog extends HTMLElement {
               <button class="fdt-save-response-btn action-button">save response</button>
               <button class="fdt-save-as-template-btn action-button">save as template</button>
             </div>
+              <div class="save-template-form hidden">
+                <input placeholder="save as" type="text" autofocus size="3" class="devtools-text-input template-name-input"/>
+                <button tabindex="0" class="template-button save-template-button" aria-label="Close">✓</button>
+              </div>
             <wc-codemirror mode="javascript" theme="monokai" value="function(){console.log("Hello")}"></wc-codemirror>
             <div class="fdt-editor-container" style="height:100%">
             </div>
@@ -56,6 +62,9 @@ class OneDialog extends HTMLElement {
 
   getStyles() {
     return `
+    .hidden {
+      display: none !important;
+    }
     .section {
       padding: 12px 20px;
     }
@@ -154,6 +163,56 @@ class OneDialog extends HTMLElement {
     .close:focus {
       background: orange;
     }
+    .devtools-text-input {
+      border: 1px solid rgba(133, 132, 132, 1);
+      border-radius: 2px;
+      font-size: 14px;
+      line-height: 32px;
+      font-family: "Source Code Pro", monospace;
+      padding-left: 4px;
+      border-radius: 6px;
+      outline: none;
+      border: none;
+      background: #f3f3f4;
+      font-weight: 400;
+      line-height: 24px;
+      box-sizing: border-box;
+      border: 3px solid transparent;
+      flex: 1;
+      margin-right: 12px;
+    }
+    .devtools-text-input:focus {
+      border: 3px solid;
+      border-color: rgba(138, 90, 158, 0.45);
+      box-shadow: 0 0 0 4px rgba(234,76,137,0.1);
+      outline: none;
+      background: white;
+    }
+    .save-template-form {
+      display: flex;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    .template-button {
+      padding: 8px 16px;
+      background: rgba(31, 137, 14, 0.1);
+      border-radius: 15px;
+      color: #1F890E;
+      text-align: center;
+      letter-spacing: 1px;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 3px 4px;
+      border-radius: 2px !important;
+      height: 28px;
+      padding: 4px 8px;
+    }
+    .template-button:hover,
+    .template-button:focus {
+      background: #1f890e36;
+      outline: none;
+    }
     `;
   }
   
@@ -170,7 +229,8 @@ class OneDialog extends HTMLElement {
     shadowRoot.querySelector('button').addEventListener('click', this.close);
     shadowRoot.querySelector('.overlay').addEventListener('click', this.close);
     shadowRoot.querySelector('.fdt-save-response-btn').addEventListener('click', this.saveResponse);
-    shadowRoot.querySelector('.fdt-save-as-template-btn').addEventListener('click', this.saveTemplate);
+    shadowRoot.querySelector('.fdt-save-as-template-btn').addEventListener('click', this.toggleSaveTemplateForm);
+    shadowRoot.querySelector('.save-template-button').addEventListener('click', this.saveTemplate);
 
     this.setCode(this.getAttribute('customResponseCode'));
     this.open = true;
@@ -186,19 +246,25 @@ class OneDialog extends HTMLElement {
     //close drawer
   }
 
+  toggleSaveTemplateForm() {
+    this.isSaveFormOpen = true;
+    this.shadowRoot.querySelector('.save-template-form').classList.remove('hidden');
+    this.shadowRoot.querySelector('.template-name-input').focus();
+  }
+
   saveTemplate() {
     try {
       const code = this.shadowRoot.querySelector('wc-codemirror').value;
       JSON.parse(code);
-      const templateName = window.prompt('Template Name?', '');
+      const templateName = this.shadowRoot.querySelector('.template-name-input').value;
       saveAsTemplate(code, templateName);
       eventBus.fire('fdt-refresh-templates');
+      this.shadowRoot.querySelector('.save-template-form').classList.add('hidden');
     } catch(err) {
       console.log(err);
       // show warning
     }
   }
-
   setCode(code){
     this.shadowRoot.querySelector('wc-codemirror').value = code;
   }
