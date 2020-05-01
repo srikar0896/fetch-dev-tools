@@ -8,7 +8,7 @@ class OneDialog extends HTMLElement {
   static get observedAttributes() {
     return ['open', 'isSaveFormOpen'];
   }
-  
+
   constructor() {
     super();
     this.handleTemplateChange = this.handleTemplateChange.bind(this);
@@ -21,7 +21,7 @@ class OneDialog extends HTMLElement {
     eventBus.register('fdt-use-template', this.handleTemplateChange);
     this.isSaveFormOpen = false;
   }
-  
+
   attributeChangedCallback(attrName, oldValue, newValue) {
     if (oldValue !== newValue) {
       this[attrName] = this.hasAttribute(attrName);
@@ -215,7 +215,7 @@ class OneDialog extends HTMLElement {
     }
     `;
   }
-  
+
   connectedCallback() {
     const { shadowRoot } = this;
     shadowRoot.innerHTML = `
@@ -224,8 +224,8 @@ class OneDialog extends HTMLElement {
       </style>
       ${this.getContent()}
     `;
-    
-    
+
+
     shadowRoot.querySelector('button').addEventListener('click', this.close);
     shadowRoot.querySelector('.overlay').addEventListener('click', this.close);
     shadowRoot.querySelector('.fdt-save-response-btn').addEventListener('click', this.saveResponse);
@@ -280,12 +280,12 @@ class OneDialog extends HTMLElement {
     this.shadowRoot.querySelector('button').removeEventListener('click', this.close);
     this.shadowRoot.querySelector('.overlay').removeEventListener('click', this.close);
   }
-  
+
   get open() {
     return this.hasAttribute('open');
   }
-  
-  
+
+
   set open(isOpen) {
     const { shadowRoot } = this;
     shadowRoot.querySelector('.wrapper').classList.toggle('open', isOpen);
@@ -303,18 +303,18 @@ class OneDialog extends HTMLElement {
       this.close();
     }
   }
-  
-  
+
+
   close() {
     // if (this.open !== false) {
     //   this.open = false;
     // }
     eventBus.fire('fdt-close-editor');
   }
-  
+
   _watchEscape(event) {
     if (event.key === 'Escape') {
-        this.close();   
+        this.close();
     }
   }
 }

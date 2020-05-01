@@ -3,6 +3,7 @@ import { resolveRequest, rejectRequest } from "../requestService";
 import { getTemplates, saveAsTemplate } from '../templatesService';
 import "./customResponseEditor";
 import eventBus from '../eventBus';
+import { live } from 'lit-html/directives/live'
 
 class RequestItem extends LitElement {
   constructor(){
@@ -12,21 +13,10 @@ class RequestItem extends LitElement {
     this.handleSaveResponse = this.handleSaveResponse.bind(this);
     this.handleCloseEditor = this.handleCloseEditor.bind(this);
     this.customResponseCode = "";
-    this.status_code = "301";
-    this.error_message = "not auth!";
+    this.status_code = "403";
+    this.error_message = "Authentication Failed!";
     eventBus.register('fdt-save-response', this.handleSaveResponse);
     eventBus.register('fdt-close-editor', this.handleCloseEditor);
-  }
-
-  bind(property) {
-    return (e) => {
-      this[property] = e.target.value
-    }
-  }
-  
-  shouldUpdate(x, y){
-    console.log(x,y);
-    return true;
   }
 
   static get properties() {
@@ -34,18 +24,24 @@ class RequestItem extends LitElement {
       request: { attribute: true, reflect: true, type: Object },
       isExpanded: { type: Boolean },
       drawerOpen: {type: Boolean},
-      customResponseCode: { type: String, reflect: true },
+      index: { type: String},
+      status_code: { type: String },
+      error_message: { type: String }
     }
   }
 
   handleResolve(){
-    resolveRequest({id:this.request.id, status_code: this.status_code, response: this.customResponseCode || "" });
+    const status_code = this.statusCode.value;
+    console.log({status_code});
+    resolveRequest({id:this.request.id, status_code, response: this.customResponseCode || "" });
   }
 
   handleReject(){
-    rejectRequest({ id:this.request.id, status_code: this.status_code, error_message: this.error_message });
+    const status_code = this.statusCode.value;
+    const error_message = this.errorMessage.value;
+    rejectRequest({ id:this.request.id, status_code, error_message });
   }
-  
+
   handleToggle() {
     this.isExpanded = !this.isExpanded;
     const customResponseButton = this.shadowRoot.querySelector('.custom-response-button');
@@ -58,6 +54,7 @@ class RequestItem extends LitElement {
 
   handleSaveResponse(event) {
     if(event.detail.requestId === this.request.id) {
+      console.log('======', this.request.id, event.detail.requestId);
       this.customResponseCode = event.detail.code;
       this.shadowRoot.querySelector('.custom-response-button').focus();
     }
@@ -67,7 +64,16 @@ class RequestItem extends LitElement {
     this.drawerOpen = false;
   }
 
+  get statusCode(){
+    return this.shadowRoot.getElementById('status_code')
+  }
+
+  get errorMessage(){
+    return this.shadowRoot.getElementById('error_message')
+  }
+
   render(){
+    console.log(this.status_code);
     return html`
     <div class="devtools__request_item__wrapper">
       <div class="devtools__request_item">
@@ -90,7 +96,7 @@ class RequestItem extends LitElement {
           </svg>
         </button>
       </div>
-      ${this.drawerOpen ? 
+      ${this.drawerOpen ?
         (
           html`
             <fdt-response-editor requestId=${this.request.id} customResponseCode="${this.customResponseCode}">
@@ -117,13 +123,13 @@ class RequestItem extends LitElement {
                 <span>
                   Status code
                 </span>
-                <input .value="${this.status_code}" type="text" autofocus size="3" class="devtools-text-input status-code"/>
+                <input .value="${this.status_code}" id="status_code" type="text" autofocus size="3" class="devtools-text-input status-code"/>
               </div>
               <div class="section">
                 <span>
                   Error message
                 </span>
-                <textarea .value="${this.error_message}" rows="3" cols="25" class="devtools-text-input"></textarea>
+                <textarea .value="${this.error_message}" id="error_message" rows="3" cols="25" class="devtools-text-input"></textarea>
               </div>
             </div>
           `
@@ -172,7 +178,7 @@ class RequestItem extends LitElement {
         font-size: 11px;
         background: #24A832;
       }
-      
+
       .reject {
         font-size: 12px;
         background: #EE6619;

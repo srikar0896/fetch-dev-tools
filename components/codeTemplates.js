@@ -87,7 +87,7 @@ class FDTTemplates extends LitElement {
         outline: none;
       }
       .templates-container{
-        display: flex;
+        display: block;
       }
       hr {
         border: 1px solid rgba(22, 47, 86, 0.1);

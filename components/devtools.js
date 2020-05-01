@@ -3,6 +3,7 @@ import "./RequestItem";
 import fetch from "../fetch";
 import requestsService from "../requestService";
 import { makeDragable } from "../utils";
+import { repeat } from 'lit-html/directives/repeat.js'
 
 class FetchDevTools extends LitElement {
   constructor(){
@@ -49,7 +50,7 @@ class FetchDevTools extends LitElement {
         this.requests.length === 0
           ? html`<center><code>No Requests</code></center>`
           : html`
-          ${this.requests.map(request => html`<fetch-devtools-requestitem request=${JSON.stringify(request)}></fetch-devtools-requestitem>`)}
+          ${repeat(this.requests, request=> request.id, request => html`<fetch-devtools-requestitem request=${JSON.stringify(request)}></fetch-devtools-requestitem>`)}
         `
       }
       </div>
