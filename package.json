@@ -1,14 +1,14 @@
 {
-  "name": "index-polymer",
-  "version": "1.0.0",
-  "description": "",
+  "name": "fetch-dev-tools",
+  "version": "1.0.1",
+  "description": "visual mock tool for javascript. Useful to mock api call without writing redundant bloat code to mock the user flow.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
-  "author": "",
+  "author": "@srikar0896",
   "license": "ISC",
   "dependencies": {
     "codemirror": "^5.52.2",
@@ -20,5 +20,21 @@
   },
   "browserslist": [
     "last 1 chrome versions"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srikar0896/fetch-dev-tools.git"
+  },
+  "keywords": [
+    "mock",
+    "javascript",
+    "react",
+    "vue",
+    "web-components",
+    "code-mirror"
+  ],
+  "bugs": {
+    "url": "https://github.com/srikar0896/fetch-dev-tools/issues"
+  },
+  "homepage": "https://github.com/srikar0896/fetch-dev-tools#readme"
 }

@@ -1,4 +1,5 @@
 import { registerRequest } from "./requestService";
+import "./components/devtools";
 
 const fetch = (options, extra) => {
   if(typeof(options) === "string") {
