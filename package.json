@@ -1,6 +1,6 @@
 {
   "name": "fetch-dev-tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "visual mock tool for javascript. Useful to mock api call without writing redundant bloat code to mock the user flow.",
   "main": "index.js",
   "scripts": {
