@@ -1,5 +1,4 @@
 import { BehaviorSubject } from "rxjs";
-import uuid from "uuid";
 
 let requests = [];
 let processingRequests = [];
@@ -10,7 +9,7 @@ const requestRejector = new BehaviorSubject("");
 const processingRequestsSubscriber = new BehaviorSubject(processingRequests);
 
 const registerRequest = requestOptions => {
-  const requestId = uuid();
+  const requestId = `req-${Date.now()}`;
   const r = {
     id: requestId,
     options: requestOptions

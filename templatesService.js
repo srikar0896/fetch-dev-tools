@@ -1,5 +1,3 @@
-import uuid from "uuid";
-
 const storageKey = "fetch-dev-tools-templates";
 
 export const getTemplates = () => JSON.parse(window.localStorage.getItem(storageKey)) || [];
@@ -9,7 +7,7 @@ export const saveAsTemplate = (code, templateName) => {
   window.localStorage.setItem(storageKey, JSON.stringify([
       ...templates,
       {
-      id: uuid(),
+      id: `template-${Date.now()}`,
       name: templateName,
       code,
       }
